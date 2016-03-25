@@ -1,7 +1,7 @@
 # react-retinaImage
 ==================
 
-## Usage
+### Usage
 
 install packages
 
@@ -17,7 +17,7 @@ build js
 
 ==================
 
-## Reference:
+### Reference:
 
 [retina.js](http://imulus.github.io/retinajs/)
 
