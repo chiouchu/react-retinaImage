@@ -9,9 +9,9 @@ class App extends PureComponent {
     render() {
         return (
             <div>
-                <h1>RetinaImage.js for img tag</h1>
+                <h1>Component:</h1>
                 <RetinaImage src="images/photo.jpg" />
-                <h1>LESS for backgraound images</h1>
+                <h1>LESS Mixin:</h1>
                 <div className="bgRetina"></div>
             </div>
         );

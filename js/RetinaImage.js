@@ -64,8 +64,8 @@ class RetinaImage extends Component {
                             this.setState({ retinaImgExists: true });
                         }
                     }
-                    this.setState({ retinaCheckComplete: true });
                 });
+                this.setState({ retinaCheckComplete: true });
             } else {
                 this.setState({ src: imgSrc });
             }
