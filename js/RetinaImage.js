@@ -41,9 +41,9 @@ class RetinaImage extends Component {
     render() {
         return (<img
             ref="img"
-            { ...this.props }
-            { ...this.state }
             src={ this.state.src }
+            width={ this.state.width }
+            height={ this.state.height }
             onLoad={ () => this.handleOnLoad() }
         />);
     }
@@ -57,51 +57,58 @@ class RetinaImage extends Component {
         if (isRetina()) {
             if (checkIfRetinaImgExists) {
                 imageExists(imgSrc, (exists) => {
+                    const newState = { retinaCheckComplete: true };
                     if (exists) {
-                        if (imgLoaded) {
-                            this.setState({ src: imgSrc });
+                        if (!imgLoaded) {
+                            Object.assign(newState, this.setImageSize(), { src: imgSrc });
                         } else {
-                            this.setState({ retinaImgExists: true });
+                            Object.assign(newState, { retinaImgExists: true });
                         }
                     }
-                    this.setState({ retinaCheckComplete: true });
+                    this.setState(newState);
                 });
             } else {
                 this.setState({ src: imgSrc });
             }
-        } else {
             this.setState({ retinaCheckComplete: true });
         }
     }
 
     checkLoaded() {
         const el = this.refs.img;
-        if (!el.complete) {
-            return false;
-        }
-        if (el.naturalWidth === 0) {
+        if (!el.complete || el.naturalWidth === 0) {
             return false;
         }
         this.handleOnLoad();
     }
 
     handleOnLoad() {
-        const { forceOriginalDimensions, checkIfRetinaImgExists } = this.props;
+        const { checkIfRetinaImgExists } = this.props;
         const { retinaImgExists } = this.state;
         const imgSrc = this.getRetinaPath();
+        const newState = {};
+
+        Object.assign(newState, this.setImageSize(), { imgLoaded: true });
+
+        // If the retina image check has already finished, set the 2x path.
+        if (retinaImgExists || !checkIfRetinaImgExists) {
+            Object.assign(newState, { src: imgSrc });
+        }
+
+        this.setState(newState);
+    }
+
+    setImageSize() {
+        const { forceOriginalDimensions } = this.props;
         const imgRef = this.refs.img;
 
         if (forceOriginalDimensions) {
-            this.setState({
+            return ({
                 width: imgRef.clientWidth,
                 height: imgRef.clientHeight
             });
         }
-        this.setState({ imgLoaded: true });
-
-        if (retinaImgExists || !checkIfRetinaImgExists) {
-            this.setState({ src: imgSrc });
-        }
+        return {};
     }
 
     getRetinaPath() {
