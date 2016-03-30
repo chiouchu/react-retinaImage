@@ -18,10 +18,6 @@ build js
 
 `npm run start`
 
-* TODOS:
-
-`npm run test`
-
 
 ==================
 
